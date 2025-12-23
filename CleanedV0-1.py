@@ -17,6 +17,77 @@ config = {
     "setting": ""
 }
 
+class RoundedButton(tk.Canvas):
+    def __init__(self, parent, text, command=None, radius=20, padding=10, bg_color="#4CAF50", 
+                 hover_color="#45a049", active_color="#ff0000", text_color="white", 
+                 font=("Arial", 11, "bold"), **kwargs):
+        tk.Canvas.__init__(self, parent, borderwidth=0, relief="flat", 
+                          highlightthickness=0, bg=parent.cget("bg"), **kwargs)
+        self.command = command
+        self.radius = radius
+        self.padding = padding
+        self.bg_color = bg_color
+        self.hover_color = hover_color
+        self.active_color = active_color
+        self.text_color = text_color
+        self.font = font
+        self.text = text
+        
+        # Calculate button size based on text
+        temp_label = tk.Label(self, text=text, font=font)
+        temp_label.update_idletasks()
+        text_width = temp_label.winfo_reqwidth()
+        text_height = temp_label.winfo_reqheight()
+        temp_label.destroy()
+        
+        self.width = text_width + padding * 2
+        self.height = text_height + padding * 2
+        
+        self.config(width=self.width, height=self.height)
+        
+        self.draw_button(self.bg_color)
+        
+        # Bind events
+        self.bind("<Button-1>", self.on_click)
+        self.bind("<ButtonRelease-1>", self.on_release)
+        self.bind("<Enter>", self.on_enter)
+        self.bind("<Leave>", self.on_leave)
+    
+    def draw_button(self, color):
+        self.delete("all")
+        # Draw rounded rectangle
+        x1, y1 = 0, 0
+        x2, y2 = self.width, self.height
+        r = self.radius
+        
+        # Create rounded rectangle using arcs and lines
+        self.create_arc(x1, y1, x1 + 2*r, y1 + 2*r, start=90, extent=90, fill=color, outline=color)
+        self.create_arc(x2 - 2*r, y1, x2, y1 + 2*r, start=0, extent=90, fill=color, outline=color)
+        self.create_arc(x1, y2 - 2*r, x1 + 2*r, y2, start=180, extent=90, fill=color, outline=color)
+        self.create_arc(x2 - 2*r, y2 - 2*r, x2, y2, start=270, extent=90, fill=color, outline=color)
+        self.create_rectangle(x1 + r, y1, x2 - r, y2, fill=color, outline=color)
+        self.create_rectangle(x1, y1 + r, x2, y2 - r, fill=color, outline=color)
+        
+        # Draw text
+        self.create_text(self.width/2, self.height/2, text=self.text, 
+                        fill=self.text_color, font=self.font, tags="text")
+    
+    def on_enter(self, event):
+        self.draw_button(self.hover_color)
+        self.config(cursor="hand2")
+    
+    def on_leave(self, event):
+        self.draw_button(self.bg_color)
+        self.config(cursor="")
+    
+    def on_click(self, event):
+        self.draw_button(self.active_color)
+    
+    def on_release(self, event):
+        self.draw_button(self.hover_color)
+        if self.command:
+            self.command()
+
 def only_integer(char):
     return char.isdigit()
 
@@ -231,18 +302,16 @@ folder_label_title = tk.Label(folder_frame,
 folder_label_title.pack(anchor="w", pady=(0, 8))
 
 # Button with modern style
-folder_button = tk.Button(folder_frame, 
+folder_button = RoundedButton(folder_frame, 
                          text="📁 Select Folder", 
                          command=select_folder,
-                         font=("Arial", 11, "bold"),
-                         fg="white",
-                         bg="#4CAF50",  # Blue
-                         activebackground="#ff0000",  # Darker blue on click
-                         activeforeground="white",
-                         relief=tk.FLAT,
-                         bd=0,
-                         padx=20,
-                         pady=10,)
+                         radius=15,
+                         padding=15,
+                         bg_color="#4CAF50",
+                         hover_color="#45a049",
+                         active_color="#3d8b40",
+                         text_color="white",
+                         font=("Arial", 11, "bold"))
 folder_button.pack(pady=(0, 10))
 
 label_folder = tk.Label(folder_frame, 
@@ -254,33 +323,29 @@ label_folder = tk.Label(folder_frame,
 label_folder.pack(pady=(0, 20))
 
 # Update button
-update_button = tk.Button(folder_frame, 
+update_button = RoundedButton(folder_frame, 
                          text="✓ Update Configuration", 
                          command=update_values,
-                         font=("Arial", 11, "bold"),
-                         fg="white",
-                         bg="#4CAF50",
-                         activebackground="#ff0000",
-                         activeforeground="white",
-                         relief=tk.FLAT,
-                         bd=0,
-                         padx=20,
-                         pady=10,)
+                         radius=15,
+                         padding=15,
+                         bg_color="#4CAF50",
+                         hover_color="#45a049",
+                         active_color="#3d8b40",
+                         text_color="white",
+                         font=("Arial", 11, "bold"))
 update_button.pack()
 
 # Generate barcodes button (initially hidden)
-bntGenerator = tk.Button(root, 
-                         text="Generate Barcodes", 
-                         command=generate_barcodes, 
-                         font=("Arial", 11, "bold"), 
-                         fg="white",
-                         bg="#4CAF50",
-                         activebackground="#ff0000",
-                         activeforeground="white",
-                         relief=tk.FLAT,
-                         bd=0,
-                         padx=20,
-                         pady=10,)
+bntGenerator = RoundedButton(root, 
+                         text="🎯 Generate Barcodes", 
+                         command=generate_barcodes,
+                         radius=15,
+                         padding=15,
+                         bg_color="#4CAF50",
+                         hover_color="#45a049",
+                         active_color="#3d8b40",
+                         text_color="white",
+                         font=("Arial", 11, "bold"))
 bntGenerator.pack_forget()
 
 # Instructions
