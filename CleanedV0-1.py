@@ -133,7 +133,7 @@ def generate_barcodes_thread(n, target_folder, progress_window, progress_bar, st
             barcode = EAN13(number, writer=ImageWriter())
             
             # Save to specified folder
-            archive_name = f"Code_{i+1:03d}"
+            archive_name = f"code_{i+1:03d}_{barcode.get_fullcode()}"
             full_destination_path = os.path.join(target_folder, archive_name)
             barcode.save(full_destination_path)
             
