@@ -114,6 +114,7 @@ def generate_barcodes_thread(n, target_folder, progress_window, progress_bar, st
     """Function to run barcode generation in a separate thread"""
     try:
         nm = int(n)
+        used_numbers = set()
         
         for i in range(nm):
             # Update progress
@@ -124,6 +125,9 @@ def generate_barcodes_thread(n, target_folder, progress_window, progress_bar, st
             
             # Generate random 12-digit number (EAN13 calculates the 13th)
             number = ''.join([str(random.randint(0, 9)) for _ in range(12)])
+            while number in used_numbers:
+                number = ''.join([str(random.randint(0, 9)) for _ in range(12)])
+            used_numbers.add(number)
             
             # Create EAN13 barcode with PNG image
             barcode = EAN13(number, writer=ImageWriter())
