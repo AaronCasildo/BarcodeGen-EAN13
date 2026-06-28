@@ -13,8 +13,8 @@
 - **Batch Generation**: Create hundreds of barcodes in seconds
 - **PNG Format**: High-quality images ready for printing
 - **Auto-Organization**: Automatic timestamped folders for each batch
-- **Real-Time Progress**: Visual progress bar during generation
-- **Auto-Open**: Automatically opens the destination folder upon completion
+- **Real-Time Progress**: Visual progress bar during generation **WIP**
+- **Auto-Open**: Automatically opens the destination folder upon completion **WIP**
 - **EAN-13 Standard**: Industry-standard barcode format with automatic check digit
 
 ---
@@ -43,9 +43,9 @@ Generated barcodes are organized in timestamped folders:
 ```
 Selected_Folder/
 └── Barcodes_2025-10-01_14-30-45/
-    ├── Code_001.png
-    ├── Code_002.png
-    ├── Code_003.png
+    ├── 001_1229113999042.png
+    ├── 002_9136483965565.png
+    ├── 003_0715299603312.png
     └── ...
 ```
 ---
