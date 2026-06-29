@@ -13,14 +13,16 @@
 - **Batch Generation**: Create hundreds of barcodes in seconds
 - **PNG Format**: High-quality images ready for printing
 - **Auto-Organization**: Automatic timestamped folders for each batch
-- **Real-Time Progress**: Visual progress bar during generation **WIP**
+- **Real-Time Progress**: Visual progress bar during generation
 - **Auto-Open**: Automatically opens the destination folder upon completion **WIP**
 - **EAN-13 Standard**: Industry-standard barcode format with automatic check digit
 
 ---
-
 ## Main Interface
-<img width="300" alt="image" src="https://github.com/user-attachments/assets/d8022a8b-8201-4a5f-a08d-a9b44ae7bbef" />
+<img src="media/main_ui.jpg" alt="Main UI" width="40%">
+
+## Progress Bar
+<img src="media/progressbar_ui.jpg" alt="Progress Bar" width="30%">
 
 ## Generated Barcodes
 <img width="300" alt="Code_008" src="https://github.com/user-attachments/assets/ef80aa63-b851-42de-9277-f37b4bafb7da" />
