@@ -1,3 +1,4 @@
+import os
 import tkinter as tk
 from tkinter import messagebox
 from tkinter import filedialog
@@ -101,7 +102,8 @@ def update_values():
         sub_ui()  # Show the sub UI
         generate_barcodes(config["input_value"], config["target_folder"],
                     on_progress = lambda current, total: update_progress(current, total),
-                    on_complete = lambda folder: [messagebox.showinfo("Completed", f"Barcodes generated successfully in:\n{folder}"), config["p_bar"].master.destroy()],
+                    on_complete = lambda folder: [config["p_bar"].master.destroy(),
+                                                  open_folder(folder)],
                     on_error = lambda msg: messagebox.showerror("Error", msg))
     else:
         return
@@ -132,6 +134,15 @@ def sub_ui():
 
     config["p_bar"] = ttk.Progressbar(sub_win, orient="horizontal", length=200, mode="determinate")
     config["p_bar"].pack(pady=10)
+
+def open_folder(folder_path):
+    shortened_path = shorten_path(folder_path)
+
+    if messagebox.askyesno("Barcodes Generated Successfully", f"Do you want to open the folder?\n{shortened_path}"):
+        if os.path.isdir(folder_path):
+            os.startfile(folder_path)
+        else:
+            messagebox.showerror("Error", "The specified folder does not exist.")
 
 def shorten_path(path, max_length=30):
     if len(path) <= max_length:
