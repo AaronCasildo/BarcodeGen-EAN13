@@ -3,9 +3,6 @@ import tkinter as tk
 from tkinter import messagebox
 from tkinter import filedialog
 from tkinter import ttk
-# import threading
-import time
-# Later on we will restore the threading and progress bar functionality, but for now, we will focus on the core functionality of the GUI.
 from generator import generate_barcodes
 from config import config
 
@@ -119,8 +116,7 @@ def update_progress(current, total):
         config["p_bar"]['value'] = (current / total) * 100
         config["p_bar"].master.update_idletasks()
 
-        progress_percentage = (current / total) * 100
-        config["progress"].config(text=f"{progress_percentage:.2f}%")
+        config["progress"].config(text=f"{current}/{total} barcodes generated.")
 
 def sub_ui():
     sub_win = tk.Toplevel(root)
@@ -129,11 +125,15 @@ def sub_ui():
 
     tk.Label(sub_win, text="Please wait, loading task...").pack(pady=10)
 
-    config["progress"] = tk.Label(sub_win, text="0%")
+    config["progress"] = tk.Label(sub_win, text="0/0 barcodes generated (0.00%)")
     config["progress"].pack(pady=5)
 
     config["p_bar"] = ttk.Progressbar(sub_win, orient="horizontal", length=200, mode="determinate")
     config["p_bar"].pack(pady=10)
+
+    # Make the sub window modal
+    sub_win.transient(root) 
+    sub_win.grab_set()  
 
 def open_folder(folder_path):
     shortened_path = shorten_path(folder_path)
@@ -153,8 +153,8 @@ def shorten_path(path, max_length=30):
 
 # Main window
 root = tk.Tk()
-root.title("Barcode Generator-beta")
-root.geometry("450x580")
+root.title("Barcode Generator v0.4.0-beta")
+root.geometry("450x480")
 root.resizable(False, False)
 
 # Title
@@ -183,14 +183,14 @@ quantity_label = tk.Label(quantity_frame,
                          font=("Arial", 11, "bold"),
                          fg="#2c3e50",
                          bg="#f5f7fa")
-quantity_label.pack(anchor="w", pady=(10, 0))
+quantity_label.pack(anchor="w", pady=(10, 0), padx=30)
 
 # Entry with border
 entry_container = tk.Frame(quantity_frame, 
                           bg="white", 
                           highlightbackground="#dcdde1",
                           highlightthickness=2)
-entry_container.pack(fill=tk.X)
+entry_container.pack(fill=tk.X, padx=30, pady=(5, 10))
 
 title_entry = tk.Entry(entry_container, 
                       font=("Arial", 12), 
@@ -248,12 +248,7 @@ update_button = RoundedButton(folder_frame,
                          active_color="#3d8b40",
                          text_color="white",
                          font=("Arial", 11, "bold"))
-update_button.pack()
-
-# Instructions
-instructions = tk.Label(root, text="\nInstructions:\n1. Enter the number of barcodes to generate\n2. Select destination folder\n3. Click 'Generate Barcodes'", 
-                       font=("Arial", 9), justify="left", fg="gray")
-instructions.pack(pady=20)
+update_button.pack(pady=(0, 10))
 
 def Run():
     root.mainloop()
